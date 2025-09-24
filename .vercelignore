@@ -4,6 +4,9 @@
 # Node modules
 /node_modules
 
+# React source files (should not be treated as serverless functions)
+/src
+
 # Documentation
 README.md
 BUILD_FIX_SUMMARY.md
