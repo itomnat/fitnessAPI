@@ -22,7 +22,7 @@ export default function Register() {
             return;
         }
         
-        fetch(`${API_BASE_URL}/auth-register`, {
+        fetch(`${API_BASE_URL}/auth/register`, {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
@@ -57,7 +57,7 @@ export default function Register() {
     }
 
     const retrieveUserDetails = (token) => {
-        fetch(`${API_BASE_URL}/auth-verify`, {
+        fetch(`${API_BASE_URL}/auth/verify`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }

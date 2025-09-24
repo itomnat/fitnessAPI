@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
-import { Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import AppNavbar from './components/AppNavbar.js';
 import Home from './pages/Home.js';
 import Error from './pages/Error.js';
@@ -23,7 +22,7 @@ function App() {
     };
 
     useEffect(() => {
-        fetch(`${API_BASE_URL}/auth-verify`, {
+        fetch(`${API_BASE_URL}/auth/verify`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }

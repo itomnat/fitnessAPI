@@ -16,7 +16,7 @@ export default function Login() {
     function authenticate(e) {
         e.preventDefault();
         
-        fetch(`${API_BASE_URL}/auth-login`, {
+        fetch(`${API_BASE_URL}/auth/login`, {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
@@ -50,7 +50,7 @@ export default function Login() {
     }
 
     const retrieveUserDetails = (token) => {
-        fetch(`${API_BASE_URL}/auth-verify`, {
+        fetch(`${API_BASE_URL}/auth/verify`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
