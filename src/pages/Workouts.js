@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { Container, Row, Col, Card, Button, Badge, Alert } from 'react-bootstrap';
+import { Container, Card, Button, Badge } from 'react-bootstrap';
 import { Navigate } from 'react-router-dom';
 import { Notyf } from 'notyf';
 import UserContext from '../context/UserContext';
@@ -9,7 +9,7 @@ import API_BASE_URL from '../config/api';
 
 export default function Workouts() {
     const notyf = new Notyf();
-    const { user, setUser } = useContext(UserContext);
+    const { user } = useContext(UserContext);
     
     const [workouts, setWorkouts] = useState([]);
     const [showAddModal, setShowAddModal] = useState(false);
@@ -42,7 +42,7 @@ export default function Workouts() {
 
     useEffect(() => {
         fetchWorkouts();
-    }, []);
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     // Redirect to login if user is not authenticated
     if (user.id === null) {

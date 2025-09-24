@@ -7,7 +7,7 @@ import API_BASE_URL from '../config/api';
 
 export default function Register() {
     const notyf = new Notyf();
-    const { user, setUser } = useContext(UserContext);
+    const { user } = useContext(UserContext);
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
