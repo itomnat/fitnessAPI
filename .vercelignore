@@ -9,6 +9,6 @@ README.md
 BUILD_FIX_SUMMARY.md
 WHITE_PAGE_FIX.md
 
-# Exclude only test files that might be treated as serverless functions
+# Exclude test files that might be treated as serverless functions
 src/App.test.js
 src/setupTests.js

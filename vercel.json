@@ -1,30 +1,8 @@
 {
-  "version": 2,
-  "functions": {
-    "api/auth.js": {
-      "runtime": "nodejs18.x"
-    },
-    "api/workouts.js": {
-      "runtime": "nodejs18.x"
-    }
-  },
-  "builds": [
+  "rewrites": [
     {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "build"
-      }
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "source": "/((?!api/).*)",
+      "destination": "/index.html"
     }
   ]
 }
