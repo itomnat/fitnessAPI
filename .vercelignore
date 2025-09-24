@@ -1,0 +1,13 @@
+# Exclude React source files from being treated as serverless functions
+src/
+
+# Exclude build directory
+build/
+
+# Exclude node_modules
+node_modules/
+
+# Exclude documentation
+README.md
+BUILD_FIX_SUMMARY.md
+WHITE_PAGE_FIX.md
