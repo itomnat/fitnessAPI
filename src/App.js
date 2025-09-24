@@ -1,16 +1,16 @@
 import { useState, useEffect } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { Route, Routes } from 'react-router-dom';
-import AppNavbar from './components/AppNavbar';
-import Home from './pages/Home';
-import Error from './pages/Error';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Workouts from './pages/Workouts';
-import API_BASE_URL from './config/api';
+import AppNavbar from './components/AppNavbar.js';
+import Home from './pages/Home.js';
+import Error from './pages/Error.js';
+import Login from './pages/Login.js';
+import Register from './pages/Register.js';
+import Workouts from './pages/Workouts.js';
+import API_BASE_URL from './config/api.js';
 
 import './App.css';
-import UserProvider from './context/UserContext';
+import UserProvider from './context/UserContext.js';
 
 function App() {
     const [user, setUser] = useState({

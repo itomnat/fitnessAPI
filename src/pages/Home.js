@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { Container, Row, Col, Card, Button } from 'react-bootstrap';
 import { Link, Navigate } from 'react-router-dom';
-import UserContext from '../context/UserContext';
+import UserContext from '../context/UserContext.js';
 
 export default function Home() {
     const { user } = useContext(UserContext);

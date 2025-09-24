@@ -2,10 +2,10 @@ import { useState, useEffect, useContext } from 'react';
 import { Container, Card, Button, Badge } from 'react-bootstrap';
 import { Navigate } from 'react-router-dom';
 import { Notyf } from 'notyf';
-import UserContext from '../context/UserContext';
-import AddWorkoutModal from '../components/AddWorkoutModal';
-import EditWorkoutModal from '../components/EditWorkoutModal';
-import API_BASE_URL from '../config/api';
+import UserContext from '../context/UserContext.js';
+import AddWorkoutModal from '../components/AddWorkoutModal.js';
+import EditWorkoutModal from '../components/EditWorkoutModal.js';
+import API_BASE_URL from '../config/api.js';
 
 export default function Workouts() {
     const notyf = new Notyf();

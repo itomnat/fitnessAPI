@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { Navbar, Nav, Container, Button } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
-import UserContext from '../context/UserContext';
+import UserContext from '../context/UserContext.js';
 
 export default function AppNavbar() {
     const { user, unsetUser } = useContext(UserContext);

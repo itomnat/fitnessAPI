@@ -2,8 +2,8 @@ import { useState, useEffect, useContext } from 'react';
 import { Form, Button, Container, Row, Col, Card } from 'react-bootstrap';
 import { Navigate, Link } from 'react-router-dom';
 import { Notyf } from 'notyf';
-import UserContext from '../context/UserContext';
-import API_BASE_URL from '../config/api';
+import UserContext from '../context/UserContext.js';
+import API_BASE_URL from '../config/api.js';
 
 export default function Login() {
     const notyf = new Notyf();
