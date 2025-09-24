@@ -1,6 +1,3 @@
-# Exclude React source files from being treated as serverless functions
-src/
-
 # Exclude build directory
 build/
 
@@ -11,3 +8,9 @@ node_modules/
 README.md
 BUILD_FIX_SUMMARY.md
 WHITE_PAGE_FIX.md
+
+# Exclude test files that might be treated as serverless functions
+src/**/*.test.js
+src/**/*.spec.js
+src/setupTests.js
+src/reportWebVitals.js
