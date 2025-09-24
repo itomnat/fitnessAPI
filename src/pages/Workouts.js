@@ -18,7 +18,7 @@ export default function Workouts() {
     const [loading, setLoading] = useState(true);
 
     const fetchWorkouts = () => {
-        fetch(`${API_BASE_URL}/workouts?action=get`, {
+        fetch(`${API_BASE_URL}/workouts-get`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
@@ -50,7 +50,7 @@ export default function Workouts() {
     }
 
     const handleAddWorkout = (workoutData) => {
-        fetch(`${API_BASE_URL}/workouts?action=add`, {
+        fetch(`${API_BASE_URL}/workouts-add`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -72,7 +72,7 @@ export default function Workouts() {
     };
 
     const handleEditWorkout = (workoutData) => {
-        fetch(`${API_BASE_URL}/workouts?action=update&id=${selectedWorkout._id}`, {
+        fetch(`${API_BASE_URL}/workouts-update?id=${selectedWorkout._id}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -96,7 +96,7 @@ export default function Workouts() {
 
     const handleDeleteWorkout = (workoutId) => {
         if (window.confirm('Are you sure you want to delete this workout?')) {
-            fetch(`${API_BASE_URL}/workouts?action=delete&id=${workoutId}`, {
+            fetch(`${API_BASE_URL}/workouts-delete?id=${workoutId}`, {
                 method: 'DELETE',
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -116,7 +116,7 @@ export default function Workouts() {
     };
 
     const handleCompleteWorkout = (workoutId) => {
-        fetch(`${API_BASE_URL}/workouts?action=complete&id=${workoutId}`, {
+        fetch(`${API_BASE_URL}/workouts-complete?id=${workoutId}`, {
             method: 'PATCH',
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`

@@ -23,7 +23,7 @@ function App() {
     };
 
     useEffect(() => {
-        fetch(`${API_BASE_URL}/auth?action=verify`, {
+        fetch(`${API_BASE_URL}/auth-verify`, {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`
             }
