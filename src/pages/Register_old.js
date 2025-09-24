@@ -16,12 +16,12 @@ export default function Register() {
 
     function registerUser(e) {
         e.preventDefault();
-        
+
         if (password !== confirmPassword) {
             notyf.error('Passwords do not match');
             return;
         }
-        
+
         fetch(`${API_BASE_URL}/auth/register`, {
             method: 'POST',
             headers: {
@@ -36,16 +36,13 @@ export default function Register() {
         .then(data => {
             console.log(data);
             
-            if(data.access !== undefined){
-                console.log(data.access);
-                localStorage.setItem('token', data.access);
-                retrieveUserDetails(data.access);
+            if (data.message === "Registered Successfully") {
+                notyf.success('Registration successful! Please login.');
                 setEmail("");
                 setPassword("");
                 setConfirmPassword("");
-                notyf.success('Registration Successful');
-            } else if (data.message === "User already exists") {
-                notyf.error('User already exists. Please login instead.');
+            } else if (data.error) {
+                notyf.error(data.error);
             } else {
                 notyf.error('Registration failed. Please try again.');
             }
@@ -56,26 +53,9 @@ export default function Register() {
         });
     }
 
-    const retrieveUserDetails = (token) => {
-        fetch(`${API_BASE_URL}/auth/verify`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-        .then(res => res.json())
-        .then(data => {
-            console.log(data);
-            // Note: setUser is not available in this component
-            // The user will be redirected to workouts after successful registration
-        })
-        .catch(err => {
-            console.error('Error fetching user details:', err);
-        });
-    };
-
     useEffect(() => {
-        // Validation to enable submit button when all fields are populated
-        if(email !== '' && password !== '' && confirmPassword !== ''){
+        // Validation to enable submit button when all fields are populated and passwords match
+        if (email !== '' && password !== '' && confirmPassword !== '' && password === confirmPassword) {
             setIsActive(true);
         } else {
             setIsActive(false);
@@ -115,7 +95,7 @@ export default function Register() {
                                     <Form.Label>Password</Form.Label>
                                     <Form.Control 
                                         type="password" 
-                                        placeholder="Enter your password"
+                                        placeholder="Password (minimum 8 characters)"
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
                                         required

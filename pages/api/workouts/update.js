@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken';
 import { MongoClient, ObjectId } from 'mongodb';
 
-const MONGODB_URI = process.env.MONGODB_STRING;
-const MONGODB_DB = process.env.MONGODB_DB || 'fitnessAppTracker';
+const MONGODB_URI = process.env.MONGODB_URI;
+const MONGODB_DB = process.env.MONGODB_DB || 'fitness-tracker';
 const JWT_SECRET = process.env.JWT_SECRET || 'fitnessApp';
 
 export default async function handler(req, res) {
@@ -22,15 +22,30 @@ export default async function handler(req, res) {
 
     try {
         const decoded = jwt.verify(token, JWT_SECRET);
+        const { name, duration } = req.body;
+
+        if (!name || !duration) {
+            return res.status(400).json({ error: 'Name and duration are required' });
+        }
 
         const client = await MongoClient.connect(MONGODB_URI);
         const db = client.db(MONGODB_DB);
         const workouts = db.collection('workouts');
 
-        // Verify workout belongs to user and update status
+        // Verify workout belongs to user
+        const workout = await workouts.findOne({ 
+            _id: new ObjectId(id), 
+            userId: decoded.id 
+        });
+
+        if (!workout) {
+            await client.close();
+            return res.status(404).json({ error: 'Workout not found' });
+        }
+
         const result = await workouts.updateOne(
-            { _id: new ObjectId(id), userId: decoded.id },
-            { $set: { status: 'completed' } }
+            { _id: new ObjectId(id) },
+            { $set: { name, duration } }
         );
 
         await client.close();
@@ -40,11 +55,11 @@ export default async function handler(req, res) {
         }
 
         res.status(200).json({ 
-            message: 'Workout status updated successfully',
-            updatedWorkout: { _id: id, status: 'completed' }
+            message: 'Workout updated successfully',
+            updatedWorkout: { _id: id, name, duration }
         });
     } catch (error) {
-        console.error('Complete workout error:', error);
-        res.status(500).json({ error: 'Failed to update workout status' });
+        console.error('Update workout error:', error);
+        res.status(500).json({ error: 'Failed to update workout' });
     }
 }

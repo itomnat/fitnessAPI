@@ -1,12 +1,12 @@
 import jwt from 'jsonwebtoken';
 import { MongoClient, ObjectId } from 'mongodb';
 
-const MONGODB_URI = process.env.MONGODB_STRING;
-const MONGODB_DB = process.env.MONGODB_DB || 'fitnessAppTracker';
+const MONGODB_URI = process.env.MONGODB_URI;
+const MONGODB_DB = process.env.MONGODB_DB || 'fitness-tracker';
 const JWT_SECRET = process.env.JWT_SECRET || 'fitnessApp';
 
 export default async function handler(req, res) {
-    if (req.method !== 'PATCH') {
+    if (req.method !== 'DELETE') {
         return res.status(405).json({ error: 'Method not allowed' });
     }
 
@@ -27,24 +27,21 @@ export default async function handler(req, res) {
         const db = client.db(MONGODB_DB);
         const workouts = db.collection('workouts');
 
-        // Verify workout belongs to user and update status
-        const result = await workouts.updateOne(
-            { _id: new ObjectId(id), userId: decoded.id },
-            { $set: { status: 'completed' } }
-        );
+        // Verify workout belongs to user and delete
+        const result = await workouts.deleteOne({ 
+            _id: new ObjectId(id), 
+            userId: decoded.id 
+        });
 
         await client.close();
 
-        if (result.matchedCount === 0) {
+        if (result.deletedCount === 0) {
             return res.status(404).json({ error: 'Workout not found' });
         }
 
-        res.status(200).json({ 
-            message: 'Workout status updated successfully',
-            updatedWorkout: { _id: id, status: 'completed' }
-        });
+        res.status(200).json({ message: 'Workout deleted successfully' });
     } catch (error) {
-        console.error('Complete workout error:', error);
-        res.status(500).json({ error: 'Failed to update workout status' });
+        console.error('Delete workout error:', error);
+        res.status(500).json({ error: 'Failed to delete workout' });
     }
 }

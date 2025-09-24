@@ -2,9 +2,9 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { MongoClient } from 'mongodb';
 
-const MONGODB_URI = process.env.MONGODB_STRING;
-const MONGODB_DB = process.env.MONGODB_DB || 'fitnessAppTracker';
-const JWT_SECRET = process.env.JWT_SECRET_KEY || 'fitnessApp';
+const MONGODB_URI = process.env.MONGODB_URI;
+const MONGODB_DB = process.env.MONGODB_DB || 'fitness-tracker';
+const JWT_SECRET = process.env.JWT_SECRET || 'fitnessApp';
 
 export default async function handler(req, res) {
     if (req.method !== 'POST') {

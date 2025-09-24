@@ -5,24 +5,18 @@ import { Notyf } from 'notyf';
 import UserContext from '../context/UserContext';
 import API_BASE_URL from '../config/api';
 
-export default function Register() {
+export default function Login() {
     const notyf = new Notyf();
-    const { user } = useContext(UserContext);
+    const { user, setUser } = useContext(UserContext);
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
     const [isActive, setIsActive] = useState(false);
 
-    function registerUser(e) {
+    function authenticate(e) {
         e.preventDefault();
         
-        if (password !== confirmPassword) {
-            notyf.error('Passwords do not match');
-            return;
-        }
-        
-        fetch(`${API_BASE_URL}/auth/register`, {
+        fetch(`${API_BASE_URL}/auth/login`, {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json"
@@ -42,17 +36,16 @@ export default function Register() {
                 retrieveUserDetails(data.access);
                 setEmail("");
                 setPassword("");
-                setConfirmPassword("");
-                notyf.success('Registration Successful');
-            } else if (data.message === "User already exists") {
-                notyf.error('User already exists. Please login instead.');
+                notyf.success('Successful Login');
+            } else if (data.message === "Incorrect email or password") {
+                notyf.error('Incorrect Credentials. Try again.');			
             } else {
-                notyf.error('Registration failed. Please try again.');
+                notyf.error('User not found. Try again.');
             }
         })
         .catch(err => {
-            console.error('Registration error:', err);
-            notyf.error('Registration failed. Please try again.');
+            console.error('Login error:', err);
+            notyf.error('Login failed. Please try again.');
         });
     }
 
@@ -65,8 +58,10 @@ export default function Register() {
         .then(res => res.json())
         .then(data => {
             console.log(data);
-            // Note: setUser is not available in this component
-            // The user will be redirected to workouts after successful registration
+            setUser({
+                id: data.user._id,
+                isAdmin: data.user.isAdmin
+            });
         })
         .catch(err => {
             console.error('Error fetching user details:', err);
@@ -75,12 +70,12 @@ export default function Register() {
 
     useEffect(() => {
         // Validation to enable submit button when all fields are populated
-        if(email !== '' && password !== '' && confirmPassword !== ''){
+        if(email !== '' && password !== ''){
             setIsActive(true);
         } else {
             setIsActive(false);
         }
-    }, [email, password, confirmPassword]);
+    }, [email, password]);
 
     // Redirect to workouts if user is already logged in
     if (user.id !== null) {
@@ -94,11 +89,11 @@ export default function Register() {
                     <Card className="shadow-custom">
                         <Card.Body className="p-5">
                             <div className="text-center mb-4">
-                                <h1 className="text-gradient mb-3">Join Us Today!</h1>
-                                <p className="text-muted">Create your account and start your fitness journey</p>
+                                <h1 className="text-gradient mb-3">Welcome Back!</h1>
+                                <p className="text-muted">Sign in to continue your fitness journey</p>
                             </div>
                             
-                            <Form onSubmit={(e) => registerUser(e)}>
+                            <Form onSubmit={(e) => authenticate(e)}>
                                 <Form.Group controlId="userEmail" className="mb-4">
                                     <Form.Label>Email address</Form.Label>
                                     <Form.Control 
@@ -123,32 +118,20 @@ export default function Register() {
                                     />
                                 </Form.Group>
 
-                                <Form.Group controlId="confirmPassword" className="mb-4">
-                                    <Form.Label>Confirm Password</Form.Label>
-                                    <Form.Control 
-                                        type="password" 
-                                        placeholder="Confirm your password"
-                                        value={confirmPassword}
-                                        onChange={(e) => setConfirmPassword(e.target.value)}
-                                        required
-                                        className="form-control-lg"
-                                    />
-                                </Form.Group>
-
                                 {isActive ? 
                                     <Button variant="primary" type="submit" className="w-100 btn-lg mb-3">
-                                        Create Account
+                                        Sign In
                                     </Button>
                                     : 
                                     <Button variant="secondary" type="submit" className="w-100 btn-lg mb-3" disabled>
-                                        Create Account
+                                        Sign In
                                     </Button>
                                 }
                                 
                                 <div className="text-center">
-                                    <p className="mb-0">Already have an account? 
-                                        <Button variant="link" as={Link} to="/login" className="p-0 ms-1">
-                                            Sign in here
+                                    <p className="mb-0">Don't have an account? 
+                                        <Button variant="link" as={Link} to="/register" className="p-0 ms-1">
+                                            Create one here
                                         </Button>
                                     </p>
                                 </div>

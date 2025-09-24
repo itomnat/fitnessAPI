@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken';
 import { MongoClient } from 'mongodb';
 
-const MONGODB_URI = process.env.MONGODB_STRING;
-const MONGODB_DB = process.env.MONGODB_DB || 'fitnessAppTracker';
+const MONGODB_URI = process.env.MONGODB_URI;
+const MONGODB_DB = process.env.MONGODB_DB || 'fitness-tracker';
 const JWT_SECRET = process.env.JWT_SECRET || 'fitnessApp';
 
 export default async function handler(req, res) {
@@ -11,27 +11,31 @@ export default async function handler(req, res) {
     }
 
     const token = req.headers.authorization?.replace('Bearer ', '');
+
     if (!token) {
         return res.status(401).json({ auth: 'Failed. No Token' });
     }
 
     try {
         const decoded = jwt.verify(token, JWT_SECRET);
-
+        
         const client = await MongoClient.connect(MONGODB_URI);
         const db = client.db(MONGODB_DB);
-        const workouts = db.collection('workouts');
+        const users = db.collection('users');
 
-        const userWorkouts = await workouts.find({ userId: decoded.id }).toArray();
+        const user = await users.findOne({ _id: decoded.id });
         await client.close();
 
-        if (userWorkouts.length === 0) {
-            return res.status(200).json({ message: 'No workouts found.' });
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
         }
 
-        res.status(200).json({ workouts: userWorkouts });
+        // Remove password from response
+        const { password, ...userWithoutPassword } = user;
+
+        res.status(200).json({ user: userWithoutPassword });
     } catch (error) {
-        console.error('Get workouts error:', error);
-        res.status(500).json({ error: 'Failed to fetch workouts' });
+        console.error('Token verification error:', error);
+        res.status(401).json({ auth: 'Failed', message: error.message });
     }
 }

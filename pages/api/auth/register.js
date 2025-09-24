@@ -1,8 +1,8 @@
 import bcrypt from 'bcryptjs';
 import { MongoClient } from 'mongodb';
 
-const MONGODB_URI = process.env.MONGODB_STRING;
-const MONGODB_DB = process.env.MONGODB_DB || 'fitnessAppTracker';
+const MONGODB_URI = process.env.MONGODB_URI;
+const MONGODB_DB = process.env.MONGODB_DB || 'fitness-tracker';
 
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
