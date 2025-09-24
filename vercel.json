@@ -1,5 +1,31 @@
 {
   "version": 2,
+  "functions": {
+    "api/auth-login.js": {
+      "runtime": "nodejs18.x"
+    },
+    "api/auth-register.js": {
+      "runtime": "nodejs18.x"
+    },
+    "api/auth-verify.js": {
+      "runtime": "nodejs18.x"
+    },
+    "api/workouts-get.js": {
+      "runtime": "nodejs18.x"
+    },
+    "api/workouts-add.js": {
+      "runtime": "nodejs18.x"
+    },
+    "api/workouts-update.js": {
+      "runtime": "nodejs18.x"
+    },
+    "api/workouts-delete.js": {
+      "runtime": "nodejs18.x"
+    },
+    "api/workouts-complete.js": {
+      "runtime": "nodejs18.x"
+    }
+  },
   "builds": [
     {
       "src": "package.json",
@@ -7,10 +33,6 @@
       "config": {
         "distDir": "build"
       }
-    },
-    {
-      "src": "api/**/*.js",
-      "use": "@vercel/node"
     }
   ],
   "routes": [
