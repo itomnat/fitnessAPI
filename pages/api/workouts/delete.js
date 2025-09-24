@@ -1,0 +1,47 @@
+import jwt from 'jsonwebtoken';
+import { MongoClient, ObjectId } from 'mongodb';
+
+const MONGODB_URI = process.env.MONGODB_URI;
+const MONGODB_DB = process.env.MONGODB_DB || 'fitness-tracker';
+const JWT_SECRET = process.env.JWT_SECRET || 'fitnessApp';
+
+export default async function handler(req, res) {
+    if (req.method !== 'DELETE') {
+        return res.status(405).json({ error: 'Method not allowed' });
+    }
+
+    const token = req.headers.authorization?.replace('Bearer ', '');
+    if (!token) {
+        return res.status(401).json({ auth: 'Failed. No Token' });
+    }
+
+    const { id } = req.query;
+    if (!id) {
+        return res.status(400).json({ error: 'Workout ID is required' });
+    }
+
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET);
+
+        const client = await MongoClient.connect(MONGODB_URI);
+        const db = client.db(MONGODB_DB);
+        const workouts = db.collection('workouts');
+
+        // Verify workout belongs to user and delete
+        const result = await workouts.deleteOne({ 
+            _id: new ObjectId(id), 
+            userId: decoded.id 
+        });
+
+        await client.close();
+
+        if (result.deletedCount === 0) {
+            return res.status(404).json({ error: 'Workout not found' });
+        }
+
+        res.status(200).json({ message: 'Workout deleted successfully' });
+    } catch (error) {
+        console.error('Delete workout error:', error);
+        res.status(500).json({ error: 'Failed to delete workout' });
+    }
+}
