@@ -1,15 +1,11 @@
 {
-  "functions": {
-    "api/auth.js": {
-      "runtime": "nodejs18.x"
-    },
-    "api/workouts.js": {
-      "runtime": "nodejs18.x"
-    }
-  },
   "rewrites": [
     {
-      "source": "/((?!api/).*)",
+      "source": "/api/(.*)",
+      "destination": "/api/$1"
+    },
+    {
+      "source": "/(.*)",
       "destination": "/index.html"
     }
   ]
