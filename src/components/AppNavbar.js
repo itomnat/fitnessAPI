@@ -24,24 +24,11 @@ export default function AppNavbar() {
                 </Navbar.Toggle>
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
-                        {user.id ? (
-                            <>
-                                <Nav.Link as={Link} to="/workouts" className="nav-link-custom">
-                                    <i className="fas fa-chart-line me-1"></i>
-                                    My Workouts
-                                </Nav.Link>
-                            </>
-                        ) : (
-                            <>
-                                <Nav.Link as={Link} to="/login" className="nav-link-custom">
-                                    <i className="fas fa-sign-in-alt me-1"></i>
-                                    Login
-                                </Nav.Link>
-                                <Nav.Link as={Link} to="/register" className="nav-link-custom">
-                                    <i className="fas fa-user-plus me-1"></i>
-                                    Register
-                                </Nav.Link>
-                            </>
+                        {user.id && (
+                            <Nav.Link as={Link} to="/workouts" className="nav-link-custom">
+                                <i className="fas fa-chart-line me-1"></i>
+                                My Workouts
+                            </Nav.Link>
                         )}
                     </Nav>
                     <Nav className="ms-auto">

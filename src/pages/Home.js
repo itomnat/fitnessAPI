@@ -43,22 +43,22 @@ export default function Home() {
                                     </p>
                                 </div>
                             ) : (
-                                <div className="d-grid gap-3">
-                                    <div className="row g-3">
-                                        <div className="col-md-6">
+                                <div className="d-grid gap-4">
+                                    <div className="row g-3 justify-content-center">
+                                        <div className="col-md-5 col-lg-4">
                                             <Link to="/login" className="btn btn-primary btn-lg w-100">
                                                 <i className="fas fa-sign-in-alt me-2"></i>
                                                 Login
                                             </Link>
                                         </div>
-                                        <div className="col-md-6">
+                                        <div className="col-md-5 col-lg-4">
                                             <Link to="/register" className="btn btn-outline-primary btn-lg w-100">
                                                 <i className="fas fa-user-plus me-2"></i>
                                                 Register
                                             </Link>
                                         </div>
                                     </div>
-                                    <p className="text-muted mb-0">
+                                    <p className="text-muted mb-0 text-center">
                                         New to Fitness Tracker? Create an account to get started!
                                     </p>
                                 </div>

@@ -281,6 +281,7 @@ main {
   display: flex;
   gap: 0.75rem;
   align-items: center;
+  justify-content: flex-end;
 }
 
 .btn-login {
@@ -673,6 +674,15 @@ main {
     min-height: calc(100vh - 65px);
     padding: 2rem 1rem;
   }
+  
+  .btn-lg {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+  }
+  
+  .row.g-3 .col-md-5 {
+    margin-bottom: 0.75rem;
+  }
 }
 
 /* Animation Classes */
@@ -702,6 +712,40 @@ main {
 
 .pulse {
   animation: pulse 2s infinite;
+}
+
+/* Home Page Button Styles */
+.btn-lg {
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-primary.btn-lg {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  border: none;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.btn-primary.btn-lg:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+  background: linear-gradient(135deg, var(--primary-dark), #4c63d2);
+}
+
+.btn-outline-primary.btn-lg {
+  border: 2px solid var(--primary-color);
+  color: var(--primary-color);
+  background: transparent;
+}
+
+.btn-outline-primary.btn-lg:hover {
+  transform: translateY(-2px);
+  background: var(--primary-color);
+  color: white;
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
 }
 
 /* Utility Classes */
