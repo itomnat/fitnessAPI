@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
+import { Container } from 'react-bootstrap';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import AppNavbar from './components/AppNavbar.js';
-import Home from './pages/Home.js';
-import Login from './pages/Login.js';
-import Register from './pages/Register.js';
-import Workouts from './pages/Workouts.js';
-import API_BASE_URL from './config/api.js';
-
+import AppNavbar from './components/AppNavbar';
+import Home from './pages/Home';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Workouts from './pages/Workouts';
 import './App.css';
-import UserProvider from './context/UserContext.js';
+import UserContext from './context/UserContext';
+import API_BASE_URL from './config/api';
 
 function App() {
     const [user, setUser] = useState({
@@ -18,49 +18,49 @@ function App() {
 
     const unsetUser = () => {
         localStorage.clear();
+        setUser({
+            id: null,
+            isAdmin: null
+        });
     };
 
     useEffect(() => {
-        fetch(`${API_BASE_URL}/auth?action=verify`, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
-            }
-        })
-        .then(res => res.json())
-        .then(data => {
-            console.log(data);
-
-            if (typeof data.user !== "undefined") {
-                setUser({
-                    id: data.user._id,
-                    isAdmin: data.user.isAdmin
-                });
-            } else {
+        const token = localStorage.getItem('token');
+        if (token) {
+            fetch(`${API_BASE_URL}/users/details`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data._id) {
+                    setUser({
+                        id: data._id,
+                        isAdmin: data.isAdmin
+                    });
+                } else {
+                    setUser({
+                        id: null,
+                        isAdmin: null
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching user details:', error);
                 setUser({
                     id: null,
                     isAdmin: null
                 });
-            }
-        })
-        .catch(err => {
-            console.error('Error fetching user details:', err);
-            setUser({
-                id: null,
-                isAdmin: null
             });
-        });
+        }
     }, []);
 
-    useEffect(() => {
-        console.log('User state:', user);
-        console.log('Token:', localStorage.getItem('token'));
-    }, [user]);
-
     return (
-        <UserProvider value={{user, setUser, unsetUser}}>
+        <UserContext.Provider value={{ user, setUser, unsetUser }}>
             <Router>
                 <AppNavbar />
-                <div className="main-container">
+                <Container>
                     <Routes>
                         <Route path="/" element={<Home />} />
                         <Route path="/register" element={<Register />} />
@@ -68,9 +68,9 @@ function App() {
                         <Route path="/workouts" element={<Workouts />} />
                         <Route path="*" element={<Navigate to="/" />} />
                     </Routes>
-                </div>
+                </Container>
             </Router>
-        </UserProvider>
+        </UserContext.Provider>
     );
 }
 

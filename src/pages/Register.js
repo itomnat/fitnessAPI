@@ -1,162 +1,131 @@
 import { useState, useEffect, useContext } from 'react';
-import { Form, Button, Container, Row, Col, Card } from 'react-bootstrap';
-import { Navigate, Link } from 'react-router-dom';
+import { Form, Button, Card } from 'react-bootstrap';
+import { Link, useNavigate } from 'react-router-dom';
 import { Notyf } from 'notyf';
-import UserContext from '../context/UserContext.js';
-import API_BASE_URL from '../config/api.js';
+import UserContext from '../context/UserContext';
+import API_BASE_URL from '../config/api';
 
 export default function Register() {
     const notyf = new Notyf();
     const { user } = useContext(UserContext);
+    const navigate = useNavigate();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [isActive, setIsActive] = useState(false);
 
-    function registerUser(e) {
+    // Redirect if user is already logged in
+    useEffect(() => {
+        if (user.id !== null) {
+            navigate('/workouts');
+        }
+    }, [user.id, navigate]);
+
+    // Form validation
+    useEffect(() => {
+        const isValid = email !== '' && 
+                       password !== '' && 
+                       confirmPassword !== '' && 
+                       password === confirmPassword &&
+                       password.length >= 6;
+        setIsActive(isValid);
+    }, [email, password, confirmPassword]);
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         if (password !== confirmPassword) {
             notyf.error('Passwords do not match');
             return;
         }
-        
-        fetch(`${API_BASE_URL}/auth?action=register`, {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                email: email,
-                password: password
-            })
-        })
-        .then(res => res.json())
-        .then(data => {
-            console.log(data);
-            
-            if(data.access !== undefined){
-                console.log(data.access);
-                localStorage.setItem('token', data.access);
-                retrieveUserDetails(data.access);
-                setEmail("");
-                setPassword("");
-                setConfirmPassword("");
-                notyf.success('Registration Successful');
-            } else if (data.message === "User already exists") {
-                notyf.error('User already exists. Please login instead.');
-            } else {
-                notyf.error('Registration failed. Please try again.');
-            }
-        })
-        .catch(err => {
-            console.error('Registration error:', err);
-            notyf.error('Registration failed. Please try again.');
-        });
-    }
 
-    const retrieveUserDetails = (token) => {
-        fetch(`${API_BASE_URL}/auth?action=verify`, {
-            headers: {
-                Authorization: `Bearer ${token}`
+        try {
+            const response = await fetch(`${API_BASE_URL}/users/register`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password
+                })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                notyf.success('Registration successful! Please login.');
+                navigate('/login');
+            } else {
+                notyf.error(data.message || 'Registration failed');
             }
-        })
-        .then(res => res.json())
-        .then(data => {
-            console.log(data);
-            // Note: setUser is not available in this component
-            // The user will be redirected to workouts after successful registration
-        })
-        .catch(err => {
-            console.error('Error fetching user details:', err);
-        });
+        } catch (error) {
+            console.error('Registration error:', error);
+            notyf.error('Network error. Please try again.');
+        }
     };
 
-    useEffect(() => {
-        // Validation to enable submit button when all fields are populated
-        if(email !== '' && password !== '' && confirmPassword !== ''){
-            setIsActive(true);
-        } else {
-            setIsActive(false);
-        }
-    }, [email, password, confirmPassword]);
-
-    // Redirect to workouts if user is already logged in
-    if (user.id !== null) {
-        return <Navigate to="/workouts" />;
-    }
-
     return (
-        <Container className="fade-in">
-            <Row className="justify-content-center">
-                <Col md={6} lg={5}>
-                    <Card className="shadow-custom">
-                        <Card.Body className="p-5">
-                            <div className="text-center mb-4">
-                                <h1 className="text-gradient mb-3">Join Us Today!</h1>
-                                <p className="text-muted">Create your account and start your fitness journey</p>
-                            </div>
-                            
-                            <Form onSubmit={(e) => registerUser(e)}>
-                                <Form.Group controlId="userEmail" className="mb-4">
-                                    <Form.Label>Email address</Form.Label>
-                                    <Form.Control 
-                                        type="email"
-                                        placeholder="Enter your email"
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
-                                        required
-                                        className="form-control-lg"
-                                    />
-                                </Form.Group>
+        <div className="d-flex justify-content-center align-items-center min-vh-100">
+            <Card style={{ width: '400px' }}>
+                <Card.Body>
+                    <h1 className="text-center mb-4">Register</h1>
+                    <Form onSubmit={handleSubmit}>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Email address</Form.Label>
+                            <Form.Control
+                                type="email"
+                                placeholder="Enter email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                            />
+                        </Form.Group>
 
-                                <Form.Group controlId="password" className="mb-4">
-                                    <Form.Label>Password</Form.Label>
-                                    <Form.Control 
-                                        type="password" 
-                                        placeholder="Enter your password"
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
-                                        required
-                                        className="form-control-lg"
-                                    />
-                                </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Password</Form.Label>
+                            <Form.Control
+                                type="password"
+                                placeholder="Password (min 6 characters)"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                                minLength={6}
+                            />
+                        </Form.Group>
 
-                                <Form.Group controlId="confirmPassword" className="mb-4">
-                                    <Form.Label>Confirm Password</Form.Label>
-                                    <Form.Control 
-                                        type="password" 
-                                        placeholder="Confirm your password"
-                                        value={confirmPassword}
-                                        onChange={(e) => setConfirmPassword(e.target.value)}
-                                        required
-                                        className="form-control-lg"
-                                    />
-                                </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Confirm Password</Form.Label>
+                            <Form.Control
+                                type="password"
+                                placeholder="Confirm password"
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                required
+                            />
+                        </Form.Group>
 
-                                {isActive ? 
-                                    <Button variant="primary" type="submit" className="w-100 btn-lg mb-3">
-                                        Create Account
-                                    </Button>
-                                    : 
-                                    <Button variant="secondary" type="submit" className="w-100 btn-lg mb-3" disabled>
-                                        Create Account
-                                    </Button>
-                                }
-                                
-                                <div className="text-center">
-                                    <p className="mb-0">Already have an account? 
-                                        <Button variant="link" as={Link} to="/login" className="p-0 ms-1">
-                                            Sign in here
-                                        </Button>
-                                    </p>
-                                </div>
-                            </Form>
-                        </Card.Body>
-                    </Card>
-                </Col>
-            </Row>
-        </Container>
+                        <div className="d-grid">
+                            <Button 
+                                variant="primary" 
+                                type="submit" 
+                                disabled={!isActive}
+                                className="mb-3"
+                            >
+                                Register
+                            </Button>
+                        </div>
+
+                        <div className="text-center">
+                            <p className="mb-0">
+                                Already have an account?{' '}
+                                <Link to="/login">Login here</Link>
+                            </p>
+                        </div>
+                    </Form>
+                </Card.Body>
+            </Card>
+        </div>
     );
 }

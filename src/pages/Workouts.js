@@ -1,114 +1,152 @@
 import { useState, useEffect, useContext } from 'react';
-import { Container, Card, Button, Badge } from 'react-bootstrap';
-import { Navigate } from 'react-router-dom';
+import { Container, Row, Col, Card, Button, Modal, Form, Spinner, Alert } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import { Notyf } from 'notyf';
-import UserContext from '../context/UserContext.js';
-import AddWorkoutModal from '../components/AddWorkoutModal.js';
-import API_BASE_URL from '../config/api.js';
+import UserContext from '../context/UserContext';
+import API_BASE_URL from '../config/api';
 
 export default function Workouts() {
     const notyf = new Notyf();
     const { user } = useContext(UserContext);
-    
+    const navigate = useNavigate();
+
     const [workouts, setWorkouts] = useState([]);
-    const [showAddModal, setShowAddModal] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [showModal, setShowModal] = useState(false);
+    const [editingWorkout, setEditingWorkout] = useState(null);
+    const [formData, setFormData] = useState({
+        name: '',
+        duration: ''
+    });
 
-    const fetchWorkouts = () => {
-        fetch(`${API_BASE_URL}/workouts?action=get`, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
-            }
-        })
-        .then(res => res.json())
-        .then(data => {
-            console.log(data);
-            if (data.workouts) {
-                setWorkouts(data.workouts);
-            } else {
-                setWorkouts([]);
-            }
-            setLoading(false);
-        })
-        .catch(err => {
-            console.error('Error fetching workouts:', err);
-            notyf.error('Failed to fetch workouts');
-            setLoading(false);
-        });
-    };
-
+    // Redirect if user is not logged in
     useEffect(() => {
-        fetchWorkouts();
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+        if (user.id === null) {
+            navigate('/login');
+        }
+    }, [user.id, navigate]);
 
-    // Redirect to login if user is not authenticated
-    if (user.id === null) {
-        return <Navigate to="/login" />;
-    }
+    // Fetch workouts on component mount
+    useEffect(() => {
+        if (user.id) {
+            fetchWorkouts();
+        }
+    }, [user.id]);
 
-    const handleAddWorkout = (workoutData) => {
-        fetch(`${API_BASE_URL}/workouts?action=add`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${localStorage.getItem('token')}`
-            },
-            body: JSON.stringify(workoutData)
-        })
-        .then(res => res.json())
-        .then(data => {
-            console.log(data);
-            notyf.success('Workout added successfully!');
-            setShowAddModal(false);
-            fetchWorkouts(); // Refresh the workouts list
-        })
-        .catch(err => {
-            console.error('Error adding workout:', err);
-            notyf.error('Failed to add workout');
-        });
-    };
-
-
-    const handleDeleteWorkout = (workoutId) => {
-        if (window.confirm('Are you sure you want to delete this workout?')) {
-            fetch(`${API_BASE_URL}/workouts?action=delete&id=${workoutId}`, {
-                method: 'DELETE',
+    const fetchWorkouts = async () => {
+        try {
+            setLoading(true);
+            const response = await fetch(`${API_BASE_URL}/workouts/getMyWorkouts`, {
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
-            })
-            .then(res => res.json())
-            .then(data => {
-                console.log(data);
-                notyf.success('Workout deleted successfully!');
-                fetchWorkouts(); // Refresh the workouts list
-            })
-            .catch(err => {
-                console.error('Error deleting workout:', err);
-                notyf.error('Failed to delete workout');
             });
+
+            if (response.ok) {
+                const data = await response.json();
+                setWorkouts(data.workouts || []);
+            } else {
+                notyf.error('Failed to fetch workouts');
+            }
+        } catch (error) {
+            console.error('Error fetching workouts:', error);
+            notyf.error('Network error. Please try again.');
+        } finally {
+            setLoading(false);
         }
     };
 
-    const handleCompleteWorkout = (workoutId) => {
-        fetch(`${API_BASE_URL}/workouts?action=complete&id=${workoutId}`, {
-            method: 'PATCH',
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
-            }
-        })
-        .then(res => res.json())
-        .then(data => {
-            console.log(data);
-            notyf.success('Workout marked as completed!');
-            fetchWorkouts(); // Refresh the workouts list
-        })
-        .catch(err => {
-            console.error('Error completing workout:', err);
-            notyf.error('Failed to complete workout');
-        });
+    const handleAddWorkout = () => {
+        setEditingWorkout(null);
+        setFormData({ name: '', duration: '' });
+        setShowModal(true);
     };
 
+    const handleEditWorkout = (workout) => {
+        setEditingWorkout(workout);
+        setFormData({
+            name: workout.name,
+            duration: workout.duration
+        });
+        setShowModal(true);
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        try {
+            const url = editingWorkout 
+                ? `${API_BASE_URL}/workouts/updateWorkout/${editingWorkout._id}`
+                : `${API_BASE_URL}/workouts/addWorkout`;
+
+            const method = editingWorkout ? 'PATCH' : 'POST';
+
+            const response = await fetch(url, {
+                method: method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (response.ok) {
+                notyf.success(editingWorkout ? 'Workout updated successfully!' : 'Workout added successfully!');
+                setShowModal(false);
+                fetchWorkouts();
+            } else {
+                const data = await response.json();
+                notyf.error(data.message || 'Operation failed');
+            }
+        } catch (error) {
+            console.error('Error saving workout:', error);
+            notyf.error('Network error. Please try again.');
+        }
+    };
+
+    const handleDeleteWorkout = async (workoutId) => {
+        if (window.confirm('Are you sure you want to delete this workout?')) {
+            try {
+                const response = await fetch(`${API_BASE_URL}/workouts/deleteWorkout/${workoutId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+
+                if (response.ok) {
+                    notyf.success('Workout deleted successfully!');
+                    fetchWorkouts();
+                } else {
+                    notyf.error('Failed to delete workout');
+                }
+            } catch (error) {
+                console.error('Error deleting workout:', error);
+                notyf.error('Network error. Please try again.');
+            }
+        }
+    };
+
+    const handleCompleteWorkout = async (workoutId) => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/workouts/completeWorkoutStatus/${workoutId}`, {
+                method: 'PATCH',
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+
+            if (response.ok) {
+                notyf.success('Workout marked as completed!');
+                fetchWorkouts();
+            } else {
+                notyf.error('Failed to update workout status');
+            }
+        } catch (error) {
+            console.error('Error updating workout status:', error);
+            notyf.error('Network error. Please try again.');
+        }
+    };
 
     const formatDate = (dateString) => {
         return new Date(dateString).toLocaleDateString('en-US', {
@@ -120,111 +158,120 @@ export default function Workouts() {
 
     if (loading) {
         return (
-            <Container className="fade-in">
-                <div className="loading-container">
-                    <div className="text-center">
-                        <div className="spinner-border" role="status">
-                            <span className="visually-hidden">Loading...</span>
-                        </div>
-                        <p className="mt-3 text-muted">Loading your workouts...</p>
-                    </div>
+            <Container className="mt-4">
+                <div className="text-center">
+                    <Spinner animation="border" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                    </Spinner>
                 </div>
             </Container>
         );
     }
 
     return (
-        <Container className="fade-in">
-            <div className="page-header">
-                <h1 className="page-title">My Workouts</h1>
+        <Container className="mt-4">
+            <div className="d-flex justify-content-between align-items-center mb-4">
+                <h1>My Workouts</h1>
                 <Button 
                     variant="primary" 
-                    onClick={() => setShowAddModal(true)}
+                    onClick={handleAddWorkout}
                     id="addWorkout"
-                    size="lg"
                 >
-                    ➕ Add Workout
+                    Add Workout
                 </Button>
             </div>
 
             {workouts.length === 0 ? (
-                <div className="empty-state">
-                    <div className="empty-state-icon">💪</div>
-                    <h3 className="empty-state-title">No workouts yet!</h3>
-                    <p className="empty-state-description">
-                        Start your fitness journey by adding your first workout. Every great achievement begins with a single step!
-                    </p>
-                    <Button 
-                        variant="primary" 
-                        size="lg"
-                        onClick={() => setShowAddModal(true)}
-                    >
-                        Create Your First Workout
-                    </Button>
-                </div>
+                <Alert variant="info">
+                    No workouts found. Click "Add Workout" to get started!
+                </Alert>
             ) : (
-                <div className="workout-grid">
-                    {workouts.map((workout, index) => (
-                        <Card 
-                            key={workout._id} 
-                            className={`workout-card ${workout.status === 'completed' ? 'completed' : ''} slide-up`}
-                            style={{ animationDelay: `${index * 0.1}s` }}
-                        >
-                            <Card.Body>
-                                <div className="d-flex justify-content-between align-items-start mb-3">
-                                    <Card.Title className="mb-0 text-gradient">{workout.name}</Card.Title>
-                                    <Badge 
-                                        className={workout.status === 'completed' ? 'badge-success' : 'badge-warning'}
-                                    >
-                                        {workout.status}
-                                    </Badge>
-                                </div>
-                                
-                                <div className="mb-3">
-                                    <div className="d-flex align-items-center mb-2">
-                                        <span className="me-2">⏱️</span>
-                                        <strong>Duration:</strong>
-                                        <span className="ms-2">{workout.duration}</span>
-                                    </div>
-                                    
-                                    <div className="d-flex align-items-center">
-                                        <span className="me-2">📅</span>
-                                        <strong>Date Added:</strong>
-                                        <span className="ms-2">{formatDate(workout.dateAdded)}</span>
-                                    </div>
-                                </div>
-                                
-                                <div className="d-flex flex-wrap gap-2">
-                                    <Button 
-                                        variant="outline-danger" 
-                                        size="sm"
-                                        onClick={() => handleDeleteWorkout(workout._id)}
-                                    >
-                                        🗑️ Delete
-                                    </Button>
-                                    
-                                    {workout.status !== 'completed' && (
+                <Row>
+                    {workouts.map((workout) => (
+                        <Col key={workout._id} md={6} lg={4} className="mb-3">
+                            <Card className="workout-card">
+                                <Card.Body>
+                                    <Card.Title>{workout.name}</Card.Title>
+                                    <Card.Text>
+                                        <strong>Duration:</strong> {workout.duration}<br />
+                                        <strong>Date Added:</strong> {formatDate(workout.dateAdded)}<br />
+                                        <strong>Status:</strong>{' '}
+                                        <span className={`badge ${workout.status === 'completed' ? 'bg-success' : 'bg-warning'}`}>
+                                            {workout.status}
+                                        </span>
+                                    </Card.Text>
+                                    <div className="d-flex gap-2">
                                         <Button 
-                                            variant="outline-success" 
+                                            variant="outline-primary" 
                                             size="sm"
-                                            onClick={() => handleCompleteWorkout(workout._id)}
+                                            onClick={() => handleEditWorkout(workout)}
                                         >
-                                            ✅ Complete
+                                            Edit
                                         </Button>
-                                    )}
-                                </div>
-                            </Card.Body>
-                        </Card>
+                                        <Button 
+                                            variant="outline-danger" 
+                                            size="sm"
+                                            onClick={() => handleDeleteWorkout(workout._id)}
+                                        >
+                                            Delete
+                                        </Button>
+                                        {workout.status !== 'completed' && (
+                                            <Button 
+                                                variant="outline-success" 
+                                                size="sm"
+                                                onClick={() => handleCompleteWorkout(workout._id)}
+                                            >
+                                                Complete
+                                            </Button>
+                                        )}
+                                    </div>
+                                </Card.Body>
+                            </Card>
+                        </Col>
                     ))}
-                </div>
+                </Row>
             )}
 
-            <AddWorkoutModal 
-                show={showAddModal}
-                onHide={() => setShowAddModal(false)}
-                onSave={handleAddWorkout}
-            />
-
+            {/* Add/Edit Workout Modal */}
+            <Modal show={showModal} onHide={() => setShowModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>
+                        {editingWorkout ? 'Edit Workout' : 'Add New Workout'}
+                    </Modal.Title>
+                </Modal.Header>
+                <Form onSubmit={handleSubmit}>
+                    <Modal.Body>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Workout Name</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Enter workout name"
+                                value={formData.name}
+                                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                required
+                            />
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Duration</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="e.g., 30 mins, 1 hour"
+                                value={formData.duration}
+                                onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
+                                required
+                            />
+                        </Form.Group>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={() => setShowModal(false)}>
+                            Cancel
+                        </Button>
+                        <Button variant="primary" type="submit">
+                            {editingWorkout ? 'Update Workout' : 'Add Workout'}
+                        </Button>
+                    </Modal.Footer>
+                </Form>
+            </Modal>
         </Container>
     );
 }
