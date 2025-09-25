@@ -67,65 +67,83 @@ export default function Register() {
     };
 
     return (
-        <div className="d-flex justify-content-center align-items-center min-vh-100">
-            <Card style={{ width: '400px' }}>
-                <Card.Body>
-                    <h1 className="text-center mb-4">Register</h1>
+        <div className="auth-container">
+            <div className="auth-card fade-in-up">
+                <div className="auth-header">
+                    <h1 className="auth-title">Join Fitness Tracker</h1>
+                    <p className="auth-subtitle">Start your fitness journey today</p>
+                </div>
+                
+                <div className="auth-body">
                     <Form onSubmit={handleSubmit}>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Email address</Form.Label>
+                        <Form.Group className="mb-4">
+                            <Form.Label>
+                                <i className="fas fa-envelope me-2"></i>
+                                Email Address
+                            </Form.Label>
                             <Form.Control
                                 type="email"
-                                placeholder="Enter email"
+                                placeholder="Enter your email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
+                                className="form-control-lg"
                             />
                         </Form.Group>
 
-                        <Form.Group className="mb-3">
-                            <Form.Label>Password</Form.Label>
+                        <Form.Group className="mb-4">
+                            <Form.Label>
+                                <i className="fas fa-lock me-2"></i>
+                                Password
+                            </Form.Label>
                             <Form.Control
                                 type="password"
-                                placeholder="Password (min 6 characters)"
+                                placeholder="Create a password (min 6 characters)"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
                                 minLength={6}
+                                className="form-control-lg"
                             />
                         </Form.Group>
 
-                        <Form.Group className="mb-3">
-                            <Form.Label>Confirm Password</Form.Label>
+                        <Form.Group className="mb-4">
+                            <Form.Label>
+                                <i className="fas fa-lock me-2"></i>
+                                Confirm Password
+                            </Form.Label>
                             <Form.Control
                                 type="password"
-                                placeholder="Confirm password"
+                                placeholder="Confirm your password"
                                 value={confirmPassword}
                                 onChange={(e) => setConfirmPassword(e.target.value)}
                                 required
+                                className="form-control-lg"
                             />
                         </Form.Group>
 
-                        <div className="d-grid">
+                        <div className="d-grid mb-4">
                             <Button 
                                 variant="primary" 
                                 type="submit" 
                                 disabled={!isActive}
-                                className="mb-3"
+                                size="lg"
+                                className="btn-lg"
                             >
-                                Register
+                                <i className="fas fa-user-plus me-2"></i>
+                                Create Account
                             </Button>
                         </div>
-
-                        <div className="text-center">
-                            <p className="mb-0">
-                                Already have an account?{' '}
-                                <Link to="/login">Login here</Link>
-                            </p>
-                        </div>
                     </Form>
-                </Card.Body>
-            </Card>
+                </div>
+
+                <div className="auth-link">
+                    <p className="mb-0">
+                        Already have an account?{' '}
+                        <Link to="/login">Sign in here</Link>
+                    </p>
+                </div>
+            </div>
         </div>
     );
 }

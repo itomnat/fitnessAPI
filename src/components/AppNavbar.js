@@ -13,26 +13,32 @@ export default function AppNavbar() {
     };
 
     return (
-        <Navbar bg="dark" variant="dark" expand="lg">
+        <Navbar expand="lg" className="navbar-custom">
             <Container>
-                <Navbar.Brand as={Link} to="/">
+                <Navbar.Brand as={Link} to="/" className="navbar-brand-custom">
+                    <i className="fas fa-dumbbell me-2"></i>
                     Fitness Tracker
                 </Navbar.Brand>
-                <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                <Navbar.Toggle aria-controls="basic-navbar-nav" className="border-0">
+                    <i className="fas fa-bars"></i>
+                </Navbar.Toggle>
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
                         {user.id ? (
                             <>
-                                <Nav.Link as={Link} to="/workouts">
+                                <Nav.Link as={Link} to="/workouts" className="nav-link-custom">
+                                    <i className="fas fa-chart-line me-1"></i>
                                     My Workouts
                                 </Nav.Link>
                             </>
                         ) : (
                             <>
-                                <Nav.Link as={Link} to="/login">
+                                <Nav.Link as={Link} to="/login" className="nav-link-custom">
+                                    <i className="fas fa-sign-in-alt me-1"></i>
                                     Login
                                 </Nav.Link>
-                                <Nav.Link as={Link} to="/register">
+                                <Nav.Link as={Link} to="/register" className="nav-link-custom">
+                                    <i className="fas fa-user-plus me-1"></i>
                                     Register
                                 </Nav.Link>
                             </>
@@ -40,7 +46,12 @@ export default function AppNavbar() {
                     </Nav>
                     <Nav>
                         {user.id ? (
-                            <Button variant="outline-light" onClick={handleLogout}>
+                            <Button 
+                                variant="outline-primary" 
+                                onClick={handleLogout}
+                                className="btn-logout"
+                            >
+                                <i className="fas fa-sign-out-alt me-2"></i>
                                 Logout
                             </Button>
                         ) : null}

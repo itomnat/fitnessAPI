@@ -89,53 +89,67 @@ export default function Login() {
     }, [email, password]);
 
     return (
-        <div className="d-flex justify-content-center align-items-center min-vh-100">
-            <Card style={{ width: '400px' }}>
-                <Card.Body>
-                    <h1 className="text-center mb-4">Login</h1>
+        <div className="auth-container">
+            <div className="auth-card fade-in-up">
+                <div className="auth-header">
+                    <h1 className="auth-title">Welcome Back</h1>
+                    <p className="auth-subtitle">Sign in to continue your fitness journey</p>
+                </div>
+                
+                <div className="auth-body">
                     <Form onSubmit={authenticate}>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Email address</Form.Label>
+                        <Form.Group className="mb-4">
+                            <Form.Label>
+                                <i className="fas fa-envelope me-2"></i>
+                                Email Address
+                            </Form.Label>
                             <Form.Control 
                                 type="email"
-                                placeholder="Enter email"
+                                placeholder="Enter your email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
+                                className="form-control-lg"
                             />
                         </Form.Group>
 
-                        <Form.Group className="mb-3">
-                            <Form.Label>Password</Form.Label>
+                        <Form.Group className="mb-4">
+                            <Form.Label>
+                                <i className="fas fa-lock me-2"></i>
+                                Password
+                            </Form.Label>
                             <Form.Control 
                                 type="password" 
-                                placeholder="Password"
+                                placeholder="Enter your password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
+                                className="form-control-lg"
                             />
                         </Form.Group>
 
-                        <div className="d-grid">
+                        <div className="d-grid mb-4">
                             <Button 
                                 variant="primary" 
                                 type="submit" 
                                 disabled={!isActive}
-                                className="mb-3"
+                                size="lg"
+                                className="btn-lg"
                             >
-                                Login
+                                <i className="fas fa-sign-in-alt me-2"></i>
+                                Sign In
                             </Button>
                         </div>
-
-                        <div className="text-center">
-                            <p className="mb-0">
-                                Don't have an account?{' '}
-                                <Link to="/register">Register here</Link>
-                            </p>
-                        </div>
                     </Form>
-                </Card.Body>
-            </Card>
+                </div>
+
+                <div className="auth-link">
+                    <p className="mb-0">
+                        Don't have an account?{' '}
+                        <Link to="/register">Create one here</Link>
+                    </p>
+                </div>
+            </div>
         </div>
     );
 }
