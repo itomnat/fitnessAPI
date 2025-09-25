@@ -705,21 +705,25 @@ main {
   }
   
   .btn-lg {
-    padding: 0.6rem 1.2rem;
-    font-size: 0.9rem;
-    min-width: 120px;
+    padding: 0.7rem 1.5rem;
+    font-size: 1rem;
+    min-width: 140px;
   }
   
-  .row.g-3 .col-auto {
-    margin-bottom: 0.5rem;
+  .row.g-4 .col-auto {
+    margin-bottom: 0.75rem;
   }
   
-  .row.g-3 {
-    gap: 1rem !important;
+  .row.g-4 {
+    gap: 1.5rem !important;
   }
   
-  .mb-5 {
-    margin-bottom: 2rem !important;
+  .display-4 {
+    font-size: 2.5rem !important;
+  }
+  
+  .display-5 {
+    font-size: 2rem !important;
   }
 }
 
@@ -754,26 +758,26 @@ main {
 
 /* Home Page Button Styles */
 .btn-lg {
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: 600;
-  border-radius: 10px;
+  border-radius: 12px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  min-width: 140px;
+  min-width: 160px;
   text-decoration: none;
-  letter-spacing: 0.3px;
-  padding: 0.75rem 1.5rem;
+  letter-spacing: 0.5px;
+  padding: 0.8rem 2rem;
 }
 
 .btn-primary.btn-lg {
   background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
   border: none;
-  box-shadow: 0 3px 12px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
   color: white;
 }
 
 .btn-primary.btn-lg:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
   background: linear-gradient(135deg, var(--primary-dark), #4c63d2);
   color: white;
 }
@@ -781,18 +785,25 @@ main {
 .btn-outline-primary.btn-lg {
   border: 2px solid var(--primary-color);
   color: var(--primary-color);
-  background: rgba(255, 255, 255, 0.9);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(15px);
+  box-shadow: 0 2px 10px rgba(102, 126, 234, 0.1);
   font-weight: 600;
 }
 
 .btn-outline-primary.btn-lg:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
   background: var(--primary-color);
   color: white;
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
   border-color: var(--primary-color);
+}
+
+/* Footer Styles */
+footer {
+  background: rgba(248, 249, 250, 0.8) !important;
+  backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(102, 126, 234, 0.1) !important;
 }
 
 /* Utility Classes */
