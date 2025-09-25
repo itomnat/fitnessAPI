@@ -724,22 +724,27 @@ main {
   
   .feature-icon {
     font-size: 2rem;
+    text-align: center;
   }
   
   .feature-title {
     font-size: 1.1rem;
+    text-align: center;
   }
   
   .feature-description {
     font-size: 0.9rem;
+    text-align: center;
   }
   
   .hero-subtitle {
     font-size: 1.1rem;
+    text-align: center;
   }
   
   .features-title {
     font-size: 2rem;
+    text-align: center;
   }
   
   .btn-lg {
@@ -797,6 +802,7 @@ main {
   background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
   min-height: calc(100vh - 60px);
   padding: 2rem 0;
+  text-align: center;
 }
 
 .home-page .container {
@@ -808,6 +814,7 @@ main {
   color: var(--primary-color);
   font-size: 4rem;
   margin-bottom: 2rem;
+  text-align: center;
 }
 
 .hero-title {
@@ -816,6 +823,7 @@ main {
   color: #2c3e50;
   line-height: 1.2;
   margin-bottom: 1.5rem;
+  text-align: center;
 }
 
 .hero-subtitle {
@@ -824,6 +832,7 @@ main {
   line-height: 1.6;
   max-width: 600px;
   margin: 0 auto 2rem;
+  text-align: center;
 }
 
 /* CTA Buttons */
@@ -880,6 +889,7 @@ main {
   color: #6c757d;
   font-size: 1rem;
   margin-top: 1rem;
+  text-align: center;
 }
 
 /* Features Section */
@@ -888,6 +898,7 @@ main {
   font-weight: 700;
   color: #2c3e50;
   margin-bottom: 3rem;
+  text-align: center;
 }
 
 .feature-card {
@@ -908,6 +919,7 @@ main {
   color: var(--primary-color);
   font-size: 3rem;
   margin-bottom: 1.5rem;
+  text-align: center;
 }
 
 .feature-title {
@@ -915,6 +927,7 @@ main {
   font-weight: 700;
   color: #2c3e50;
   margin-bottom: 1rem;
+  text-align: center;
 }
 
 .feature-description {
@@ -922,6 +935,7 @@ main {
   font-size: 1rem;
   line-height: 1.6;
   margin: 0;
+  text-align: center;
 }
 
 /* Footer Styles */
@@ -937,6 +951,7 @@ main {
   color: #6c757d;
   font-size: 0.9rem;
   margin: 0;
+  text-align: center;
 }
 
 /* Utility Classes */
