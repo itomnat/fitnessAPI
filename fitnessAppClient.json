@@ -1,5 +1,5 @@
 {
-    "url": "",
+    "url": "https://fitness-api-nu.vercel.app/",
     "endpoints": {
         "register": "/register",
         "login": "/login",
