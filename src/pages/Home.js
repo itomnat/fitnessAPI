@@ -28,31 +28,39 @@ export default function Home() {
                                 <i className="fas fa-dumbbell text-gradient" style={{ fontSize: '4rem' }}></i>
                             </div>
                             <h2 className="mb-4 text-gradient">Ready to Start Your Fitness Journey?</h2>
-                            <p className="lead mb-5 text-muted">
+                            <p className="lead mb-4 text-muted">
                                 Join thousands of users who are already tracking their workouts and achieving their fitness goals.
                             </p>
                             
                             {user.id ? (
                                 <div className="text-center">
-                                    <Link to="/workouts" className="btn btn-primary btn-lg px-5 py-3 mb-4">
-                                        <i className="fas fa-chart-line me-2"></i>
-                                        View My Workouts
-                                    </Link>
+                                    <div className="mb-4">
+                                        <Link to="/workouts" className="btn btn-primary btn-lg px-4 py-3">
+                                            <i className="fas fa-chart-line me-2"></i>
+                                            View My Workouts
+                                        </Link>
+                                    </div>
                                     <p className="text-muted mb-0 fs-6">
                                         Welcome back! Continue tracking your fitness progress.
                                     </p>
                                 </div>
                             ) : (
                                 <div className="text-center">
-                                    <div className="d-flex flex-column flex-md-row gap-4 justify-content-center align-items-center mb-4">
-                                        <Link to="/login" className="btn btn-primary btn-lg px-5 py-3">
-                                            <i className="fas fa-sign-in-alt me-2"></i>
-                                            Login
-                                        </Link>
-                                        <Link to="/register" className="btn btn-outline-primary btn-lg px-5 py-3">
-                                            <i className="fas fa-user-plus me-2"></i>
-                                            Register
-                                        </Link>
+                                    <div className="mb-5">
+                                        <div className="row justify-content-center g-3">
+                                            <div className="col-auto">
+                                                <Link to="/login" className="btn btn-primary btn-lg px-4 py-3">
+                                                    <i className="fas fa-sign-in-alt me-2"></i>
+                                                    Login
+                                                </Link>
+                                            </div>
+                                            <div className="col-auto">
+                                                <Link to="/register" className="btn btn-outline-primary btn-lg px-4 py-3">
+                                                    <i className="fas fa-user-plus me-2"></i>
+                                                    Register
+                                                </Link>
+                                            </div>
+                                        </div>
                                     </div>
                                     <p className="text-muted mb-0 fs-6">
                                         New to Fitness Tracker? Create an account to get started!
