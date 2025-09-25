@@ -23,18 +23,18 @@ export default function Home() {
             <Row className="justify-content-center mb-4">
                 <Col lg={8}>
                     <Card className="text-center shadow-custom">
-                        <Card.Body className="p-4">
+                        <Card.Body className="p-5">
                             <div className="mb-4">
                                 <i className="fas fa-dumbbell text-gradient" style={{ fontSize: '4rem' }}></i>
                             </div>
-                            <h2 className="mb-3 text-gradient">Ready to Start Your Fitness Journey?</h2>
-                            <p className="lead mb-4 text-muted">
+                            <h2 className="mb-4 text-gradient">Ready to Start Your Fitness Journey?</h2>
+                            <p className="lead mb-5 text-muted">
                                 Join thousands of users who are already tracking their workouts and achieving their fitness goals.
                             </p>
                             
                             {user.id ? (
-                                <div className="d-grid gap-3">
-                                    <Link to="/workouts" className="btn btn-primary btn-lg">
+                                <div className="text-center">
+                                    <Link to="/workouts" className="btn btn-primary btn-lg px-4 py-3 mb-3">
                                         <i className="fas fa-chart-line me-2"></i>
                                         View My Workouts
                                     </Link>
@@ -43,22 +43,18 @@ export default function Home() {
                                     </p>
                                 </div>
                             ) : (
-                                <div className="d-grid gap-4">
-                                    <div className="row g-3 justify-content-center">
-                                        <div className="col-md-5 col-lg-4">
-                                            <Link to="/login" className="btn btn-primary btn-lg w-100">
-                                                <i className="fas fa-sign-in-alt me-2"></i>
-                                                Login
-                                            </Link>
-                                        </div>
-                                        <div className="col-md-5 col-lg-4">
-                                            <Link to="/register" className="btn btn-outline-primary btn-lg w-100">
-                                                <i className="fas fa-user-plus me-2"></i>
-                                                Register
-                                            </Link>
-                                        </div>
+                                <div className="text-center">
+                                    <div className="d-flex flex-column flex-md-row gap-3 justify-content-center align-items-center mb-3">
+                                        <Link to="/login" className="btn btn-primary btn-lg px-4 py-3">
+                                            <i className="fas fa-sign-in-alt me-2"></i>
+                                            Login
+                                        </Link>
+                                        <Link to="/register" className="btn btn-outline-primary btn-lg px-4 py-3">
+                                            <i className="fas fa-user-plus me-2"></i>
+                                            Register
+                                        </Link>
                                     </div>
-                                    <p className="text-muted mb-0 text-center">
+                                    <p className="text-muted mb-0">
                                         New to Fitness Tracker? Create an account to get started!
                                     </p>
                                 </div>
