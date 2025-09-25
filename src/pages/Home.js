@@ -20,14 +20,14 @@ export default function Home() {
                 </Col>
             </Row>
 
-            <Row className="justify-content-center mb-5">
+            <Row className="justify-content-center mb-4">
                 <Col lg={8}>
                     <Card className="text-center shadow-custom">
-                        <Card.Body className="p-5">
+                        <Card.Body className="p-4">
                             <div className="mb-4">
                                 <i className="fas fa-dumbbell text-gradient" style={{ fontSize: '4rem' }}></i>
                             </div>
-                            <h2 className="mb-4 text-gradient">Ready to Start Your Fitness Journey?</h2>
+                            <h2 className="mb-3 text-gradient">Ready to Start Your Fitness Journey?</h2>
                             <p className="lead mb-4 text-muted">
                                 Join thousands of users who are already tracking their workouts and achieving their fitness goals.
                             </p>
@@ -72,10 +72,10 @@ export default function Home() {
             <Row className="justify-content-center">
                 <Col lg={10}>
                     <h3 className="text-center mb-5 text-gradient">Why Choose Fitness Tracker?</h3>
-                    <Row className="g-4">
+                    <Row className="g-3">
                         <Col md={4}>
                             <Card className="text-center h-100 shadow-custom">
-                                <Card.Body className="p-4">
+                                <Card.Body className="p-3">
                                     <div className="mb-3">
                                         <i className="fas fa-chart-bar text-gradient" style={{ fontSize: '2.5rem' }}></i>
                                     </div>
@@ -88,7 +88,7 @@ export default function Home() {
                         </Col>
                         <Col md={4}>
                             <Card className="text-center h-100 shadow-custom">
-                                <Card.Body className="p-4">
+                                <Card.Body className="p-3">
                                     <div className="mb-3">
                                         <i className="fas fa-mobile-alt text-gradient" style={{ fontSize: '2.5rem' }}></i>
                                     </div>
@@ -101,7 +101,7 @@ export default function Home() {
                         </Col>
                         <Col md={4}>
                             <Card className="text-center h-100 shadow-custom">
-                                <Card.Body className="p-4">
+                                <Card.Body className="p-3">
                                     <div className="mb-3">
                                         <i className="fas fa-trophy text-gradient" style={{ fontSize: '2.5rem' }}></i>
                                     </div>
