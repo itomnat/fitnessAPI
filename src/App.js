@@ -26,7 +26,6 @@ function App() {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        console.log('App.js - Token found:', token);
         if (token) {
             fetch(`${API_BASE_URL}/users/details`, {
                 headers: {
@@ -35,19 +34,16 @@ function App() {
             })
             .then(res => res.json())
             .then(data => {
-                console.log('App.js - User details response:', data);
-                if (data._id) {
+                if (data.user && data.user._id) {
                     setUser({
-                        id: data._id,
-                        isAdmin: data.isAdmin
+                        id: data.user._id,
+                        isAdmin: data.user.isAdmin
                     });
-                    console.log('App.js - User set:', { id: data._id, isAdmin: data.isAdmin });
                 } else {
                     setUser({
                         id: null,
                         isAdmin: null
                     });
-                    console.log('App.js - User not found, setting to null');
                 }
             })
             .catch(error => {
@@ -57,8 +53,6 @@ function App() {
                     isAdmin: null
                 });
             });
-        } else {
-            console.log('App.js - No token found, user remains null');
         }
     }, []);
 

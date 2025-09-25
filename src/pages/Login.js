@@ -38,11 +38,9 @@ export default function Login() {
             });
 
             const data = await response.json();
-            console.log('Login response:', data);
 
             if (data.access !== undefined) {
                 localStorage.setItem('token', data.access);
-                console.log('Token stored:', data.access);
                 await retrieveUserDetails(data.access);
 
                 setEmail("");
@@ -64,7 +62,6 @@ export default function Login() {
 
     const retrieveUserDetails = async (token) => {
         try {
-            console.log('Retrieving user details with token:', token);
             const response = await fetch(`${API_BASE_URL}/users/details`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -72,14 +69,12 @@ export default function Login() {
             });
 
             const data = await response.json();
-            console.log('User details response:', data);
 
             if (response.ok) {
                 setUser({
-                    id: data._id,
-                    isAdmin: data.isAdmin
+                    id: data.user._id,
+                    isAdmin: data.user.isAdmin
                 });
-                console.log('User set in Login component:', { id: data._id, isAdmin: data.isAdmin });
             } else {
                 console.error('Failed to retrieve user details:', data);
             }
