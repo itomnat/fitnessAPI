@@ -55,8 +55,8 @@ body {
 
 /* Main content spacing */
 main {
-  margin-top: 80px;
-  min-height: calc(100vh - 80px);
+  margin-top: 70px;
+  min-height: calc(100vh - 70px);
   padding: 2rem 0;
 }
 
@@ -218,13 +218,14 @@ main {
   backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: var(--shadow-md);
-  padding: 1rem 0;
+  padding: 0.75rem 0;
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   z-index: 1000;
   width: 100%;
+  min-height: 70px;
 }
 
 .navbar-brand-custom {
@@ -261,9 +262,23 @@ main {
   border-radius: 8px;
   font-weight: 500;
   transition: all 0.3s ease;
+  padding: 0.5rem 1rem;
 }
 
 .btn-logout:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-auth {
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+}
+
+.btn-auth:hover {
   transform: translateY(-1px);
   box-shadow: var(--shadow-md);
 }
@@ -280,6 +295,56 @@ main {
 .navbar-toggler i {
   font-size: 1.25rem;
   color: var(--dark-text);
+}
+
+/* Navbar collapse styles */
+.navbar-collapse {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar-nav {
+  align-items: center;
+}
+
+.navbar-nav .nav-item {
+  display: flex;
+  align-items: center;
+}
+
+/* Ensure proper button alignment */
+.navbar-nav .btn {
+  margin-left: 0.5rem;
+}
+
+/* Mobile navbar adjustments */
+@media (max-width: 991.98px) {
+  .navbar-collapse {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .navbar-nav {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .navbar-nav .nav-item {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+  
+  .navbar-nav .btn {
+    width: 100%;
+    margin-left: 0;
+    margin-bottom: 0.5rem;
+  }
+  
+  .d-flex.gap-2 {
+    flex-direction: column;
+    gap: 0.5rem !important;
+  }
 }
 
 /* Workout Card Styles */
@@ -352,12 +417,12 @@ main {
 
 /* Auth Pages */
 .auth-container {
-  min-height: calc(100vh - 80px);
+  min-height: calc(100vh - 70px);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 2rem;
-  margin-top: 80px;
+  margin-top: 70px;
 }
 
 .auth-card {
@@ -491,6 +556,20 @@ main {
   .navbar-custom {
     padding: 0.5rem 0;
   }
+  
+  .btn-auth {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+  
+  .navbar-brand-custom {
+    font-size: 1.25rem;
+  }
+  
+  .nav-link-custom {
+    padding: 0.4rem 0.8rem !important;
+    font-size: 0.9rem;
+  }
 }
 
 @media (max-width: 576px) {
@@ -504,6 +583,39 @@ main {
   
   .modal-dialog {
     margin: 1rem;
+  }
+  
+  .navbar-custom {
+    padding: 0.4rem 0;
+    min-height: 60px;
+  }
+  
+  .navbar-brand-custom {
+    font-size: 1.1rem;
+  }
+  
+  .navbar-brand-custom i {
+    font-size: 1rem;
+  }
+  
+  .btn-auth {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.75rem;
+  }
+  
+  .nav-link-custom {
+    padding: 0.3rem 0.6rem !important;
+    font-size: 0.85rem;
+  }
+  
+  main {
+    margin-top: 60px;
+    min-height: calc(100vh - 60px);
+  }
+  
+  .auth-container {
+    margin-top: 60px;
+    min-height: calc(100vh - 60px);
   }
 }
 

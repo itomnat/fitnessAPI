@@ -14,7 +14,7 @@ export default function AppNavbar() {
 
     return (
         <Navbar expand="lg" className="navbar-custom">
-            <Container>
+            <Container fluid>
                 <Navbar.Brand as={Link} to="/" className="navbar-brand-custom">
                     <i className="fas fa-dumbbell me-2"></i>
                     Fitness Tracker
@@ -44,7 +44,7 @@ export default function AppNavbar() {
                             </>
                         )}
                     </Nav>
-                    <Nav>
+                    <Nav className="ms-auto">
                         {user.id ? (
                             <Button 
                                 variant="outline-primary" 
@@ -54,7 +54,30 @@ export default function AppNavbar() {
                                 <i className="fas fa-sign-out-alt me-2"></i>
                                 Logout
                             </Button>
-                        ) : null}
+                        ) : (
+                            <div className="d-flex gap-2">
+                                <Button 
+                                    variant="primary" 
+                                    as={Link} 
+                                    to="/login"
+                                    size="sm"
+                                    className="btn-auth"
+                                >
+                                    <i className="fas fa-sign-in-alt me-1"></i>
+                                    Login
+                                </Button>
+                                <Button 
+                                    variant="outline-primary" 
+                                    as={Link} 
+                                    to="/register"
+                                    size="sm"
+                                    className="btn-auth"
+                                >
+                                    <i className="fas fa-user-plus me-1"></i>
+                                    Register
+                                </Button>
+                            </div>
+                        )}
                     </Nav>
                 </Navbar.Collapse>
             </Container>
