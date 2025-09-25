@@ -4,7 +4,6 @@ import { Navigate } from 'react-router-dom';
 import { Notyf } from 'notyf';
 import UserContext from '../context/UserContext.js';
 import AddWorkoutModal from '../components/AddWorkoutModal.js';
-import EditWorkoutModal from '../components/EditWorkoutModal.js';
 import API_BASE_URL from '../config/api.js';
 
 export default function Workouts() {
@@ -13,8 +12,6 @@ export default function Workouts() {
     
     const [workouts, setWorkouts] = useState([]);
     const [showAddModal, setShowAddModal] = useState(false);
-    const [showEditModal, setShowEditModal] = useState(false);
-    const [selectedWorkout, setSelectedWorkout] = useState(null);
     const [loading, setLoading] = useState(true);
 
     const fetchWorkouts = () => {
@@ -71,28 +68,6 @@ export default function Workouts() {
         });
     };
 
-    const handleEditWorkout = (workoutData) => {
-        fetch(`${API_BASE_URL}/workouts?action=update&id=${selectedWorkout._id}`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${localStorage.getItem('token')}`
-            },
-            body: JSON.stringify(workoutData)
-        })
-        .then(res => res.json())
-        .then(data => {
-            console.log(data);
-            notyf.success('Workout updated successfully!');
-            setShowEditModal(false);
-            setSelectedWorkout(null);
-            fetchWorkouts(); // Refresh the workouts list
-        })
-        .catch(err => {
-            console.error('Error updating workout:', err);
-            notyf.error('Failed to update workout');
-        });
-    };
 
     const handleDeleteWorkout = (workoutId) => {
         if (window.confirm('Are you sure you want to delete this workout?')) {
@@ -134,10 +109,6 @@ export default function Workouts() {
         });
     };
 
-    const openEditModal = (workout) => {
-        setSelectedWorkout(workout);
-        setShowEditModal(true);
-    };
 
     const formatDate = (dateString) => {
         return new Date(dateString).toLocaleDateString('en-US', {
@@ -225,14 +196,6 @@ export default function Workouts() {
                                 
                                 <div className="d-flex flex-wrap gap-2">
                                     <Button 
-                                        variant="outline-primary" 
-                                        size="sm"
-                                        onClick={() => openEditModal(workout)}
-                                    >
-                                        ✏️ Edit
-                                    </Button>
-                                    
-                                    <Button 
                                         variant="outline-danger" 
                                         size="sm"
                                         onClick={() => handleDeleteWorkout(workout._id)}
@@ -262,15 +225,6 @@ export default function Workouts() {
                 onSave={handleAddWorkout}
             />
 
-            <EditWorkoutModal 
-                show={showEditModal}
-                onHide={() => {
-                    setShowEditModal(false);
-                    setSelectedWorkout(null);
-                }}
-                onSave={handleEditWorkout}
-                workout={selectedWorkout}
-            />
         </Container>
     );
 }
