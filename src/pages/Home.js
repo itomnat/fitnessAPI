@@ -20,7 +20,7 @@ export default function Home() {
                 </Col>
             </Row>
 
-            <Row className="justify-content-center mb-4">
+            <Row className="justify-content-center mb-5">
                 <Col lg={8}>
                     <Card className="text-center shadow-custom">
                         <Card.Body className="p-5">
@@ -34,27 +34,27 @@ export default function Home() {
                             
                             {user.id ? (
                                 <div className="text-center">
-                                    <Link to="/workouts" className="btn btn-primary btn-lg px-4 py-3 mb-3">
+                                    <Link to="/workouts" className="btn btn-primary btn-lg px-5 py-3 mb-4">
                                         <i className="fas fa-chart-line me-2"></i>
                                         View My Workouts
                                     </Link>
-                                    <p className="text-muted mb-0">
+                                    <p className="text-muted mb-0 fs-6">
                                         Welcome back! Continue tracking your fitness progress.
                                     </p>
                                 </div>
                             ) : (
                                 <div className="text-center">
-                                    <div className="d-flex flex-column flex-md-row gap-3 justify-content-center align-items-center mb-3">
-                                        <Link to="/login" className="btn btn-primary btn-lg px-4 py-3">
+                                    <div className="d-flex flex-column flex-md-row gap-4 justify-content-center align-items-center mb-4">
+                                        <Link to="/login" className="btn btn-primary btn-lg px-5 py-3">
                                             <i className="fas fa-sign-in-alt me-2"></i>
                                             Login
                                         </Link>
-                                        <Link to="/register" className="btn btn-outline-primary btn-lg px-4 py-3">
+                                        <Link to="/register" className="btn btn-outline-primary btn-lg px-5 py-3">
                                             <i className="fas fa-user-plus me-2"></i>
                                             Register
                                         </Link>
                                     </div>
-                                    <p className="text-muted mb-0">
+                                    <p className="text-muted mb-0 fs-6">
                                         New to Fitness Tracker? Create an account to get started!
                                     </p>
                                 </div>
