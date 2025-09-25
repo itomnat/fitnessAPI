@@ -55,25 +55,23 @@ export default function AppNavbar() {
                                 Logout
                             </Button>
                         ) : (
-                            <div className="d-flex gap-2">
+                            <div className="auth-buttons">
                                 <Button 
                                     variant="primary" 
                                     as={Link} 
                                     to="/login"
-                                    size="sm"
-                                    className="btn-auth"
+                                    className="btn-login"
                                 >
-                                    <i className="fas fa-sign-in-alt me-1"></i>
+                                    <i className="fas fa-sign-in-alt me-2"></i>
                                     Login
                                 </Button>
                                 <Button 
                                     variant="outline-primary" 
                                     as={Link} 
                                     to="/register"
-                                    size="sm"
-                                    className="btn-auth"
+                                    className="btn-register"
                                 >
-                                    <i className="fas fa-user-plus me-1"></i>
+                                    <i className="fas fa-user-plus me-2"></i>
                                     Register
                                 </Button>
                             </div>
