@@ -7,7 +7,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Workouts from './pages/Workouts';
 import './App.css';
-import UserContext from './context/UserContext';
+import UserContext, { UserProvider } from './context/UserContext';
 import API_BASE_URL from './config/api';
 
 function App() {
@@ -26,6 +26,7 @@ function App() {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
+        console.log('App.js - Token found:', token);
         if (token) {
             fetch(`${API_BASE_URL}/users/details`, {
                 headers: {
@@ -34,16 +35,19 @@ function App() {
             })
             .then(res => res.json())
             .then(data => {
+                console.log('App.js - User details response:', data);
                 if (data._id) {
                     setUser({
                         id: data._id,
                         isAdmin: data.isAdmin
                     });
+                    console.log('App.js - User set:', { id: data._id, isAdmin: data.isAdmin });
                 } else {
                     setUser({
                         id: null,
                         isAdmin: null
                     });
+                    console.log('App.js - User not found, setting to null');
                 }
             })
             .catch(error => {
@@ -53,11 +57,13 @@ function App() {
                     isAdmin: null
                 });
             });
+        } else {
+            console.log('App.js - No token found, user remains null');
         }
     }, []);
 
     return (
-        <UserContext.Provider value={{ user, setUser, unsetUser }}>
+        <UserProvider value={{ user, setUser, unsetUser }}>
             <Router>
                 <AppNavbar />
                 <Container>
@@ -70,7 +76,7 @@ function App() {
                     </Routes>
                 </Container>
             </Router>
-        </UserContext.Provider>
+        </UserProvider>
     );
 }
 

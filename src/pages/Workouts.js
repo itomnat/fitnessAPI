@@ -6,6 +6,7 @@ import UserContext from '../context/UserContext';
 import API_BASE_URL from '../config/api';
 
 export default function Workouts() {
+    console.log('Workouts component rendered');
     const notyf = new Notyf();
     const { user } = useContext(UserContext);
     const navigate = useNavigate();
@@ -21,31 +22,45 @@ export default function Workouts() {
 
     // Redirect if user is not logged in
     useEffect(() => {
-        if (user.id === null) {
+        console.log('User state in Workouts:', user);
+        console.log('Token in localStorage:', localStorage.getItem('token'));
+        if (!user || user.id === null) {
+            console.log('User not logged in, redirecting to login');
             navigate('/login');
         }
-    }, [user.id, navigate]);
+    }, [user, navigate]);
 
     // Fetch workouts on component mount
     useEffect(() => {
-        if (user.id) {
+        console.log('Fetching workouts for user:', user?.id);
+        if (user && user.id) {
             fetchWorkouts();
         }
-    }, [user.id]);
+    }, [user]);
 
     const fetchWorkouts = async () => {
         try {
             setLoading(true);
+            console.log('Fetching workouts from:', `${API_BASE_URL}/workouts/getMyWorkouts`);
+            const token = localStorage.getItem('token');
+            console.log('Using token:', token);
+            
             const response = await fetch(`${API_BASE_URL}/workouts/getMyWorkouts`, {
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${token}`
                 }
             });
 
+            console.log('Response status:', response.status);
+            console.log('Response ok:', response.ok);
+
             if (response.ok) {
                 const data = await response.json();
+                console.log('Workouts data:', data);
                 setWorkouts(data.workouts || []);
             } else {
+                const errorData = await response.json();
+                console.error('Error response:', errorData);
                 notyf.error('Failed to fetch workouts');
             }
         } catch (error) {
@@ -170,6 +185,36 @@ export default function Workouts() {
 
     return (
         <Container className="mt-4">
+            <div className="alert alert-info">
+                <strong>Debug:</strong> Workouts component is rendering. User: {user ? JSON.stringify(user) : 'undefined'}
+                <br />
+                <strong>API URL:</strong> {API_BASE_URL}
+                <br />
+                <Button 
+                    variant="outline-secondary" 
+                    size="sm" 
+                    onClick={() => {
+                        console.log('Testing API connection...');
+                        fetch(`${API_BASE_URL}/workouts/getMyWorkouts`, {
+                            headers: {
+                                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                            }
+                        })
+                        .then(res => {
+                            console.log('API Test Response Status:', res.status);
+                            return res.json();
+                        })
+                        .then(data => {
+                            console.log('API Test Response Data:', data);
+                        })
+                        .catch(error => {
+                            console.error('API Test Error:', error);
+                        });
+                    }}
+                >
+                    Test API Connection
+                </Button>
+            </div>
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <h1>My Workouts</h1>
                 <Button 

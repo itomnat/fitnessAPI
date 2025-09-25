@@ -10,4 +10,6 @@ export const useUser = () => {
   return context;
 };
 
+export const UserProvider = UserContext.Provider;
+
 export default UserContext;
