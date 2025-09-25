@@ -17,12 +17,29 @@
   --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
 body {
   font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   background-attachment: fixed;
   min-height: 100vh;
   color: var(--dark-text);
+  overflow-x: hidden;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .min-vh-100 {
@@ -32,6 +49,15 @@ body {
 /* Container Styles */
 .container {
   max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Main content spacing */
+main {
+  margin-top: 80px;
+  min-height: calc(100vh - 80px);
+  padding: 2rem 0;
 }
 
 /* Card Styles */
@@ -193,6 +219,12 @@ body {
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: var(--shadow-md);
   padding: 1rem 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  width: 100%;
 }
 
 .navbar-brand-custom {
@@ -320,11 +352,12 @@ body {
 
 /* Auth Pages */
 .auth-container {
-  min-height: 100vh;
+  min-height: calc(100vh - 80px);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 2rem;
+  margin-top: 80px;
 }
 
 .auth-card {
@@ -410,6 +443,8 @@ body {
   
   .auth-container {
     padding: 1rem;
+    margin-top: 70px;
+    min-height: calc(100vh - 70px);
   }
   
   .auth-card {
@@ -445,6 +480,16 @@ body {
   
   .workout-card .d-flex.gap-2 .btn {
     width: 100%;
+  }
+  
+  main {
+    margin-top: 70px;
+    min-height: calc(100vh - 70px);
+    padding: 1rem 0;
+  }
+  
+  .navbar-custom {
+    padding: 0.5rem 0;
   }
 }
 
@@ -513,3 +558,39 @@ body {
   border: 2px solid;
   border-image: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) 1;
 }
+
+/* Font Awesome fallbacks */
+.fas, .far, .fab {
+  display: inline-block;
+  font-style: normal;
+  font-variant: normal;
+  text-rendering: auto;
+  line-height: 1;
+}
+
+/* Fallback for missing icons */
+.fas:before {
+  content: "•";
+  font-weight: bold;
+}
+
+.fa-dumbbell:before { content: "🏋️"; }
+.fa-chart-line:before { content: "📈"; }
+.fa-chart-bar:before { content: "📊"; }
+.fa-mobile-alt:before { content: "📱"; }
+.fa-trophy:before { content: "🏆"; }
+.fa-sign-in-alt:before { content: "🔑"; }
+.fa-user-plus:before { content: "👤"; }
+.fa-envelope:before { content: "✉️"; }
+.fa-lock:before { content: "🔒"; }
+.fa-plus:before { content: "➕"; }
+.fa-edit:before { content: "✏️"; }
+.fa-trash:before { content: "🗑️"; }
+.fa-check:before { content: "✅"; }
+.fa-check-circle:before { content: "✅"; }
+.fa-clock:before { content: "⏰"; }
+.fa-calendar:before { content: "📅"; }
+.fa-times:before { content: "❌"; }
+.fa-save:before { content: "💾"; }
+.fa-sign-out-alt:before { content: "🚪"; }
+.fa-bars:before { content: "☰"; }

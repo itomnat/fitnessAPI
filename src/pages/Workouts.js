@@ -160,19 +160,22 @@ export default function Workouts() {
 
     if (loading) {
         return (
-            <Container className="mt-4">
-                <div className="loading-container">
-                    <Spinner animation="border" role="status" className="spinner-border-primary">
-                        <span className="visually-hidden">Loading...</span>
-                    </Spinner>
-                    <p className="loading-text">Loading your workouts...</p>
-                </div>
-            </Container>
+            <main>
+                <Container>
+                    <div className="loading-container">
+                        <Spinner animation="border" role="status" className="spinner-border-primary">
+                            <span className="visually-hidden">Loading...</span>
+                        </Spinner>
+                        <p className="loading-text">Loading your workouts...</p>
+                    </div>
+                </Container>
+            </main>
         );
     }
 
     return (
-        <Container className="mt-4 fade-in-up">
+        <main>
+            <Container className="fade-in-up">
             <div className="page-header">
                 <div className="d-flex justify-content-between align-items-center flex-wrap">
                     <div>
@@ -354,6 +357,7 @@ export default function Workouts() {
                     </Modal.Footer>
                 </Form>
             </Modal>
-        </Container>
+            </Container>
+        </main>
     );
 }

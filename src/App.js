@@ -60,15 +60,13 @@ function App() {
         <UserProvider value={{ user, setUser, unsetUser }}>
             <Router>
                 <AppNavbar />
-                <Container>
-                    <Routes>
-                        <Route path="/" element={<Home />} />
-                        <Route path="/register" element={<Register />} />
-                        <Route path="/login" element={<Login />} />
-                        <Route path="/workouts" element={<Workouts />} />
-                        <Route path="*" element={<Navigate to="/" />} />
-                    </Routes>
-                </Container>
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/register" element={<Register />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/workouts" element={<Workouts />} />
+                    <Route path="*" element={<Navigate to="/" />} />
+                </Routes>
             </Router>
         </UserProvider>
     );

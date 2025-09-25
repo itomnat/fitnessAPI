@@ -7,7 +7,8 @@ export default function Home() {
     const { user } = useContext(UserContext);
 
     return (
-        <Container className="mt-5 fade-in-up">
+        <main>
+            <Container className="fade-in-up">
             <Row className="justify-content-center">
                 <Col lg={10}>
                     <div className="page-header text-center">
@@ -114,6 +115,7 @@ export default function Home() {
                     </Row>
                 </Col>
             </Row>
-        </Container>
+            </Container>
+        </main>
     );
 }
