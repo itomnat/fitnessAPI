@@ -26,6 +26,7 @@ export default function Login() {
         e.preventDefault();
 
         try {
+            console.log('Attempting login with:', { email, password: '***' });
             const response = await fetch(`${API_BASE_URL}/users/login`, {
                 method: 'POST',
                 headers: {
@@ -37,9 +38,11 @@ export default function Login() {
                 })
             });
 
+            console.log('Login response status:', response.status);
             const data = await response.json();
+            console.log('Login response data:', data);
 
-            if (data.access !== undefined) {
+            if (response.ok && data.access !== undefined) {
                 localStorage.setItem('token', data.access);
                 await retrieveUserDetails(data.access);
 
@@ -51,7 +54,7 @@ export default function Login() {
             } else if (data.message === "Incorrect email or password") {
                 notyf.error('Incorrect Credentials. Try again.');
             } else {
-                notyf.error('User not found. Try again.');
+                notyf.error(data.message || 'Login failed. Please try again.');
             }
         } catch (error) {
             console.error('Login error:', error);
