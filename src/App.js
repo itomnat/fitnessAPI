@@ -6,8 +6,9 @@ import { Route, Routes, Navigate } from 'react-router-dom';
 // import Home from './pages/Home';
 // import Error from './pages/Error';
 import Login from './pages/Login';
-// import Logout from './pages/Logout';
+import Logout from './pages/Logout';
 import Register from './pages/Register';
+import Workouts from './pages/Workouts';
 
 
 import './App.css';
@@ -31,6 +32,8 @@ function App() {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
+        console.log('App.js - Checking token on mount:', token ? 'Token exists' : 'No token');
+        
         if (!token) {
             setUser({
                 id: null,
@@ -39,21 +42,27 @@ function App() {
             return;
         }
 
+        console.log('App.js - Fetching user details with token');
         fetch(`${process.env.REACT_APP_API_URL || 'https://fitnessapp-api-ln8u.onrender.com'}/users/details`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
         })
-        .then(res => res.json())
+        .then(res => {
+            console.log('App.js - User details response status:', res.status);
+            return res.json();
+        })
         .then(data => {
-            console.log(data);
+            console.log('App.js - User details response data:', data);
 
             if (typeof data.user !== "undefined") {
                 setUser({
                   id: data.user._id,
                   isAdmin: data.user.isAdmin
                 });
+                console.log('App.js - User context set successfully');
             } else {
+                console.log('App.js - No user data found, clearing context');
                 setUser({
                   id: null,
                   isAdmin: null
@@ -61,7 +70,7 @@ function App() {
             }
         })
         .catch(error => {
-            console.error('Error fetching user details:', error);
+            console.error('App.js - Error fetching user details:', error);
             setUser({
                 id: null,
                 isAdmin: null
@@ -114,7 +123,8 @@ function App() {
             {/*<Routes path="/" element={<Home />} />*/}
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
-            {/*<Routes path="/logout" element={<Logout />} />*/}
+            <Route path="/workouts" element={<Workouts />} />
+            <Route path="/logout" element={<Logout />} />
             {/*<Routes path="*" element={<Error />} />*/}
           </Routes>
         </Container>

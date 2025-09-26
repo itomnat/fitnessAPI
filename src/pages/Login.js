@@ -65,19 +65,23 @@ export default function Login() {
 
     const retrieveUserDetails = async (token) => {
         try {
+            console.log('Retrieving user details with token:', token.substring(0, 20) + '...');
             const response = await fetch(`${API_BASE_URL}/users/details`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
             });
 
+            console.log('User details response status:', response.status);
             const data = await response.json();
+            console.log('User details response data:', data);
 
             if (response.ok) {
                 setUser({
                     id: data.user._id,
                     isAdmin: data.user.isAdmin
                 });
+                console.log('User context updated successfully');
             } else {
                 console.error('Failed to retrieve user details:', data);
             }
