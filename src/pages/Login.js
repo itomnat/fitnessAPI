@@ -26,7 +26,6 @@ export default function Login() {
         e.preventDefault();
 
         try {
-            console.log('Attempting login with:', { email, password: '***' });
             const response = await fetch(`${API_BASE_URL}/users/login`, {
                 method: 'POST',
                 headers: {
@@ -38,23 +37,26 @@ export default function Login() {
                 })
             });
 
-            console.log('Login response status:', response.status);
             const data = await response.json();
-            console.log('Login response data:', data);
 
-            if (response.ok && data.access !== undefined) {
-                localStorage.setItem('token', data.access);
-                await retrieveUserDetails(data.access);
+            if (response.ok) {
+                // Handle different possible token field names
+                const token = data.access || data.token || data.accessToken;
+                
+                if (token) {
+                    localStorage.setItem('token', token);
+                    await retrieveUserDetails(token);
 
-                setEmail("");
-                setPassword("");
+                    setEmail("");
+                    setPassword("");
 
-                notyf.success('Successful Login');
-                navigate('/workouts');
-            } else if (data.message === "Incorrect email or password") {
-                notyf.error('Incorrect Credentials. Try again.');
+                    notyf.success('Successful Login');
+                    navigate('/workouts');
+                } else {
+                    notyf.error('Login successful but no token received');
+                }
             } else {
-                notyf.error(data.message || 'Login failed. Please try again.');
+                notyf.error(data.message || 'Login failed');
             }
         } catch (error) {
             console.error('Login error:', error);
@@ -65,23 +67,19 @@ export default function Login() {
 
     const retrieveUserDetails = async (token) => {
         try {
-            console.log('Retrieving user details with token:', token.substring(0, 20) + '...');
             const response = await fetch(`${API_BASE_URL}/users/details`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
             });
 
-            console.log('User details response status:', response.status);
             const data = await response.json();
-            console.log('User details response data:', data);
 
             if (response.ok) {
                 setUser({
                     id: data.user._id,
                     isAdmin: data.user.isAdmin
                 });
-                console.log('User context updated successfully');
             } else {
                 console.error('Failed to retrieve user details:', data);
             }
